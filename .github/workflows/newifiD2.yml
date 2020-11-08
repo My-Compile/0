@@ -146,7 +146,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.releases_token }}
       with:
-        tag_name: 自动发布-${{ steps.tag.outputs.release_tag }}
+        tag_name: 自动发布-NewifiD2-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: ${{ env.FIRMWARE }}/*
 
