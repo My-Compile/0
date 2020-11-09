@@ -6,7 +6,8 @@ on:
     inputs:
   schedule:
     - cron: '10 00 * * *'
-
+  watch:
+    types: started
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
