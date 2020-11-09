@@ -1,10 +1,10 @@
 name: r2s-lede
 
 on:
-  repository_dispatch:
-  workflow_dispatch:
-    inputs:
-
+  push:
+    branches: [ master ]
+    paths:
+      - '.github/workflows/r2s.yml'
   schedule:
     - cron: '10 00 * * *'
 
