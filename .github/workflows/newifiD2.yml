@@ -148,7 +148,7 @@ jobs:
       with:
         tag_name: 自动发布-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*
+        files: ${{ env.FIRMWARE }}/*.bin
 
     - name: Remove old Artifacts
       uses: c-hive/gha-remove-artifacts@v1.2.0
