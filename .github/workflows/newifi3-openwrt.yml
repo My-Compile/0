@@ -101,7 +101,7 @@ jobs:
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: ./artifact.zip
+        path: openwrt/bin
 
     - name: Organize files
       id: organize
@@ -137,4 +137,4 @@ jobs:
       with:
         tag_name: Newifi3-openwrt${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*.zip
+        files: ${{ env.FIRMWARE }}
