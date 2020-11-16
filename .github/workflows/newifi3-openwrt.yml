@@ -137,4 +137,4 @@ jobs:
       with:
         tag_name: Newifi3-openwrt${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*.bin
+        files: ${{ env.FIRMWARE }}/*
