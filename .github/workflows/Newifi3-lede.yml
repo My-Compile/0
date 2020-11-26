@@ -1,11 +1,11 @@
-name: newifi-d2-lede
+name: newifi3
 
 on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
   schedule:
-    - cron: '30 20 3 * *'
+    - cron: '30 20 * * 5'
 
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
@@ -123,10 +123,8 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "::set-output name=release_tag::NewifiD2-$(date +"%Y.%m.%d-%H%M")"
+        echo "::set-output name=release_tag::Newifi3-lede-$(date +"%Y.%m.%d-%H%M")"
         touch release.txt
-        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
         echo "::set-output name=status::success"
         
     - name: Upload firmware to release
