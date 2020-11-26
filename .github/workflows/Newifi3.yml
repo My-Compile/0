@@ -1,4 +1,4 @@
-name: newifi3
+name: newifi3-lede
 
 on:
   repository_dispatch:
@@ -123,7 +123,7 @@ jobs:
       id: tag
       if: env.UPLOAD_RELEASE == 'true' && !cancelled()
       run: |
-        echo "::set-output name=release_tag::Newifi3-lede-$(date +"%Y.%m.%d-%H%M")"
+        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
         touch release.txt
         echo "::set-output name=status::success"
         
@@ -133,6 +133,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.releases_token }}
       with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
+        tag_name: Newifi3-lede-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: ${{ env.FIRMWARE }}/*.bin
