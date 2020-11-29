@@ -128,7 +128,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       if: steps.tag.outputs.status == 'success' && !cancelled()
       env:
-        GITHUB_TOKEN: ${{ secrets.releases_token }}
+        GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
       with:
         tag_name: 自动发布-R2S-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
