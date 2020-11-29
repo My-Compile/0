@@ -131,7 +131,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       if: steps.tag.outputs.status == 'success' && !cancelled()
       env:
-        GITHUB_TOKEN: ${{ secrets.releases_token }}
+        GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
       with:
         tag_name: Newifi3-lede-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
