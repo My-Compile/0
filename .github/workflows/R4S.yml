@@ -131,4 +131,4 @@ jobs:
       with:
         tag_name: R4S-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*.gz
+        files: ${{ env.FIRMWARE }}/*
