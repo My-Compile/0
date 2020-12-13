@@ -3,11 +3,11 @@ on:
   workflow_dispatch:
     inputs:
       days:
-        description: '10'
+        description: '要保留的天数'
         required: true
         default: 30
       minimum_runs:
-        description: '3'
+        description: '每个工作流程要保留的最少运行次数'
         required: true
         default: 6
 
