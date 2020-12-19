@@ -1,0 +1,62 @@
+name: Build passwall
+
+on: 
+  schedule:
+    - cron: 0 23 * * 5
+
+env:
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: r2s.config
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+      
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo apt-get update
+        sudo apt install ccache
+        sudo apt-get -y install build-essential asciidoc binutils bzip2 curl gawk gettext git libncurses5-dev libz-dev patch python3.5 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf
+        
+    - name: Clone source code
+      run: |
+        cd ~/Downloads
+        wget https://downloads.openwrt.org/snapshots/targets/rockchip/armv8/openwrt-sdk-rockchip-armv8_gcc-8.4.0_musl.Linux-x86_64.tar.xz
+
+        tar -xf openwrt-sdk-rockchip-armv8_gcc-8.4.0_musl.Linux-x86_64.tar.xz	
+        mv openwrt-sdk-rockchip-armv8_gcc-8.4.0_musl.Linux-x86_64.tar.xz	 openwrt-sdk
+        cd openwrt-sdk
+        git clone https://github.com/shadowsocks/openwrt-feeds.git package/feeds
+        git clone https://github.com/My-Compile/packajes/tree/master/luci-app-passwall.git package/luci-app-passwall
+        
+    - name: Load custom feeds
+      run: |
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt-sdk/feeds.conf.default
+        ./scripts/feeds update -a
+        ./scripts/feeds install -a
+        
+    - name: Load custom configuration
+      run: |
+        [ -e files ] && mv files openwrt/files
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt-sdk/.config
+        
+    - name: Compile the firmware
+       run: |
+         make package/luci-app-passwall/compile V=99
+         
+    - name: Upload bin directory
+      uses: actions/upload-artifact@main
+      with:
+        name: ${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        path: openwrt-sdk/bin/*/*.ipk
+         
+    
+
+    
