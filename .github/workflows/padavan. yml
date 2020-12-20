@@ -10,7 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-20.04
 
-    
     steps:
     - name: Checkout
       uses: actions/checkout@master
@@ -96,6 +95,6 @@ jobs:
       with:
         repo_token: ${{ secrets.workflow_token }}
         file: /opt/images/*.trx
-        tag: padavan_
+        tag: padavan_$(date +"%Y%m%d%H%M")
         overwrite: true
         file_glob: true
