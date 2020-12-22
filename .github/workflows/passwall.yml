@@ -1,9 +1,6 @@
 name: Build passwall
 
 on:
-  repository_dispatch:
-  workflow_dispatch:
-    inputs:
   schedule:
     - cron: '10 21 * * 1'
 
@@ -11,8 +8,8 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: r2s.config
-  DIY_P1_SH: diy-part1.sh
+  CONFIG_FILE: ipk.config
+  DIY_P1_SH: passwall.sh
   DIY_P2_SH: diy-part2.sh
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: true
@@ -50,10 +47,10 @@ jobs:
     - name: Load custom feeds
       run: |
         [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
-        chmod +x passwall.sh
+        chmod +x $DIY_P1_SH
         cd openwrt
         cd package
-        $GITHUB_WORKSPACE/passwall.sh
+        $GITHUB_WORKSPACE/$DIY_P1_SH
         
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
@@ -98,5 +95,5 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
-        name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: r2s-ipk_${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: bin/feeds/rockchip/base/*.ipk
