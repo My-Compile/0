@@ -22,6 +22,11 @@ jobs:
         sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
+        sudo apt-get install gcc-9-aarch64-linux-gnu
+        sudo apt-get install gcc-aarch64-linux-gnu
+        cd /usr/bin
+        sudo cp gcc gcc_bkp
+        sudo ln -s aarch64-linux-gnu-gcc gcc
         sudo timedatectl set-timezone "Asia/Shanghai"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
