@@ -1,7 +1,6 @@
 name: Build padavan
 
 on: 
-  push:
   workflow_dispatch:
   schedule:
     - cron: 0 23 * * 5
@@ -102,7 +101,7 @@ jobs:
     - name: Generate release tag
       id: tag
       run: |
-        echo "::set-output name=release_tag::Auto_$(date +%Y-%m-%d)"
+        echo "::set-output name=release_tag::padavan_$(date +%Y-%m-%d)"
         touch release.txt
         echo "::set-output name=status::success"
         
