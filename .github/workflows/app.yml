@@ -6,7 +6,7 @@ on:
     - cron: '10 21 * * 5'
 
 jobs:
-    build:
+  build:
     runs-on: ubuntu-20.04
     if: github.event.repository.owner.id == github.event.sender.id
 
