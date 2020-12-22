@@ -37,6 +37,8 @@ jobs:
       run: | 
         cd openwrt/package
         git clone https://github.com/My-Compile/packajes.git
+        mv packages/* .
+        rm -rf packages/
         
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
@@ -62,9 +64,9 @@ jobs:
       id: compile
       run: |
         cd openwrt
-        make package/packages/luci-app-passwall/compile V=s
-        make package/packages/luci-app-jd-dailybonus/compile V=s
-        make package/packages/luci-app-r2sflasher/compile V=s
+        make package/luci-app-passwall/compile V=s
+        make package/luci-app-jd-dailybonus/compile V=s
+        make package/luci-app-r2sflasher/compile V=s
 
     - name: Check space usage
       if: (!cancelled())
@@ -74,7 +76,7 @@ jobs:
       uses: actions/upload-artifact@main
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: bin/packages/rockchip/base/*
+        path: bin/package/rockchip/base/*
         
     - name: Organize files
       id: organize
@@ -96,8 +98,6 @@ jobs:
       run: |
         echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M")"
         touch release.txt
-        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
         echo "::set-output name=status::success"
         
     - name: Upload firmware to release
