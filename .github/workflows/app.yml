@@ -1,4 +1,4 @@
-name: Build passwall
+name: Build ipk
 
 on:
   workflow_dispatch:
@@ -63,7 +63,7 @@ jobs:
       id: compile
       run: |
         cd openwrt
-        make /package/luci-app-passwall/compile V=s
+        make package/luci-app-passwall/compile V=s
 
     - name: Check space usage
       if: (!cancelled())
@@ -73,7 +73,7 @@ jobs:
       uses: actions/upload-artifact@main
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: openwrt/bin/package/rockchip/base/*.ipk
+        path: bin/packages/rockchip/base/*
         
     - name: Organize files
       id: organize
