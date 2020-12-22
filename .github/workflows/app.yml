@@ -35,10 +35,8 @@ jobs:
         
     - name: Load custom feeds
       run: | 
-        cd openwrt
-        sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
-        sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
-        sed -i '$a src-git passwall https://github.com/My-Compile/packajes' feeds.conf.default
+        cd openwrt/package
+        git clone https://github.com/My-Compile/packajes.git
         
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
@@ -64,9 +62,9 @@ jobs:
       id: compile
       run: |
         cd openwrt
-        make feeds/packages/luci-app-passwall/compile V=s
-        make feeds/packages/luci-app-jd-dailybonus/compile V=s
-        make feeds/packages/luci-app-r2sflasher/compile V=s
+        make package/packages/luci-app-passwall/compile V=s
+        make package/packages/luci-app-jd-dailybonus/compile V=s
+        make package/packages/luci-app-r2sflasher/compile V=s
 
     - name: Check space usage
       if: (!cancelled())
