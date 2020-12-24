@@ -36,15 +36,9 @@ jobs:
     - name: Load custom feeds
       run: | 
         cd openwrt/package
-          git clone https://github.com/songchenwen/nanopi-r2s
-          mv nanopi-r2s/luci-app-r2sflasher/ .
-          rm -rf nanopi-r2s/
-
-          git clone https://github.com/xiaorouji/openwrt-passwall
-          mv openwrt-passwall/* .
-          rm -rf openwrt-passwall/
-
-          git clone https://github.com/jerrykuku/luci-app-jd-dailybonus.git
+          git clone https://github.com/My-Compile/packages
+          mv packages/* .
+          rm -rf packages/
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
