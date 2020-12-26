@@ -63,11 +63,12 @@ jobs:
       id: compile
       run: |
         cd openwrt
-        make feeds/luci/luci-base/compile V=s
-        make feeds/helloworld/luci-app-ssr-plus/compile -j1 V=s
-        make feeds/passwall/luci-app-passwall/compile -j1 V=s
-        make feeds/passwall/luci-app-jd-dailybonus/compile -j1 V=s
-        make feeds/passwall/luci-app-r2sflasher/compile -j1 V=s
+        make package/lean/luci-app-adbyby-plus/compile V=s
+        #make feeds/luci/luci-base/compile V=s
+        #make feeds/helloworld/luci-app-ssr-plus/compile -j1 V=s
+        #make feeds/passwall/luci-app-passwall/compile -j1 V=s
+        #make feeds/passwall/luci-app-jd-dailybonus/compile -j1 V=s
+        #make feeds/passwall/luci-app-r2sflasher/compile -j1 V=s
 
     - name: Check space usage
       if: (!cancelled())
