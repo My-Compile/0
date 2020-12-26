@@ -35,10 +35,9 @@ jobs:
         
     - name: Load custom feeds
       run: | 
-        cd openwrt/package
-          git clone https://github.com/My-Compile/packages
-          mv packages/* .
-          rm -rf packages/
+        cd openwrt
+        sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
+        sed -i '$a src-git passwall https://github.com/My-Compile/packages' feeds.conf.default
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
@@ -64,10 +63,11 @@ jobs:
       id: compile
       run: |
         cd openwrt
-        make package/feeds/luci/luci-base/compile V=s
-        make package/luci-app-passwall/compile V=s
-        make package/luci-app-jd-dailybonus/compile V=s
-        make package/luci-app-r2sflasher/compile V=s
+        make feeds/luci/luci-base/compile V=s
+        make feeds/helloworld/luci-app-ssr-plus/compile -j1 V=s
+        make feeds/passwall/luci-app-passwall/compile -j1 V=s
+        make feeds/passwall/luci-app-jd-dailybonus/compile -j1 V=s
+        make feeds/passwall/luci-app-r2sflasher/compile -j1 V=s
 
     - name: Check space usage
       if: (!cancelled())
@@ -77,12 +77,12 @@ jobs:
       uses: actions/upload-artifact@main
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: bin/packages/rockchip/base/*
+        path: openwrt/bin
         
     - name: Organize files
       id: organize
       run: |
-        cd openwrt/bin/packages/rockchip/*
+        cd openwrt/bin/*
         #rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
