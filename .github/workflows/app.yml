@@ -130,6 +130,6 @@ jobs:
       with:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: openwrt/bin/packages/rockchip/base/*
+        files: openwrt/bin/*
 
     
