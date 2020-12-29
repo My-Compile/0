@@ -132,7 +132,7 @@ jobs:
       with:
         tag_name: R2S-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*.gz
+        files: openwrt/bin}/*
 
     - name: Delete workflow runs
       uses: ActionsRML/delete-workflow-runs@main
