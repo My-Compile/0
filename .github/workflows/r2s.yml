@@ -104,7 +104,7 @@ jobs:
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd openwrt/bin/targets/*/*
+        cd openwrt/bin/targets/rockchip/armv8
         rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
@@ -132,7 +132,7 @@ jobs:
       with:
         tag_name: R2S-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: openwrt/bin/targets/*
+        files: openwrt/bin/targets/rockchip/armv8/packages/*
 
     - name: Delete workflow runs
       uses: ActionsRML/delete-workflow-runs@main
