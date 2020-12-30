@@ -87,11 +87,8 @@ jobs:
       run: |
         cd openwrt
         echo -e "$(nproc) thread compile"
-        #make -j$(nproc) || make -j1 || make -j1 V=s
-        #make feeds/luci/luci-base/compile V=99
-        make tools/install
-        make toolchain/install
-        make package/luci-app-passwall/compile -j1 V=99
+        make -j$(nproc) || make -j1 || make -j1 V=s
+        #make package/luci-app-passwall/compile -j1 V=99
         #make package/luci-app-jd-dailybonus/compile -j1 V=99
         #make package/luci-app-r2sflasher/compile -j1 V=99
         echo "::set-output name=status::success"
@@ -112,7 +109,7 @@ jobs:
     - name: Organize files
       id: organize
       run: |
-        cd openwrt/bin/targets/*/*
+        cd openwrt/bin/targets/rockchip/armv8
         #rm -rf packages
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
@@ -138,6 +135,6 @@ jobs:
       with:
         tag_name: ${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
-        files: openwrt/bin/packages/*
+        files: ${{ env.FIRMWARE }}/*
 
     
