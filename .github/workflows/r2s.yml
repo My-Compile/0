@@ -133,18 +133,3 @@ jobs:
         tag_name: R2S-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: ${{ env.FIRMWARE }}/*.gz
-
-    - name: Delete workflow runs
-      uses: ActionsRML/delete-workflow-runs@main
-      with:
-        retain_days: 3
-        keep_minimum_runs: 3
-
-    - name: Remove old Releases
-      uses: dev-drprasad/delete-older-releases@v0.1.0
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-      with:
-        keep_latest: 9
-        delete_tags: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.workflow_token }}
