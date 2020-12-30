@@ -52,12 +52,12 @@ jobs:
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P1_SH
 
-    - name: Install Extra Packages
-      run: |
-        cd openwrt/package
-        git clone https://github.com/My-Compile/packages
-        mv packages/* .
-        rm -rf packages/
+    #- name: Install Extra Packages
+      #run: |
+        #cd openwrt/package
+        #git clone https://github.com/My-Compile/packages
+        #mv packages/* .
+        #rm -rf packages/
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
