@@ -1,4 +1,4 @@
-name: r2s-lede
+name: R2S-immortalwrt-21.02
 
 on:
   repository_dispatch:
@@ -9,8 +9,8 @@ on:
   watch:
     types: started
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
-  REPO_BRANCH: master
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
+  REPO_BRANCH: openwrt-21.02
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: r2s.config
   DIY_P1_SH: diy-part1.sh
