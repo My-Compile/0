@@ -1,4 +1,4 @@
-name: r2s-18.06-k5.4-511
+name: r2s-1806-k54-k511
 
 on:
   repository_dispatch:
@@ -9,10 +9,10 @@ on:
   watch:
     types: started
 env:
-  REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: openwrt-21.02
+  REPO_URL: https://github.com/My-Compile/tl
+  REPO_BRANCH: 1806-k54-k511
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: r2s-18.06-k5.4-511.config
+  CONFIG_FILE: r2s-1806-k54-k511.config
   DIY_P2_SH: diy-part2.sh
 
 jobs:
@@ -57,6 +57,7 @@ jobs:
         chmod +x $DIY_P2_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
+
     - name: Download package
       id: package
       run: |
@@ -116,6 +117,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
       with:
-        tag_name: r2s-openwrt-21.02-${{ steps.tag.outputs.release_tag }}
+        tag_name: r2s-k511-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: ${{ env.FIRMWARE }}/*.gz
