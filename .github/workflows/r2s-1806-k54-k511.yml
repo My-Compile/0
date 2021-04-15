@@ -1,18 +1,17 @@
-name: r2s-immortalwrt-21.02
+name: r2s-1806-k54-k511
 
 on:
   repository_dispatch:
   workflow_dispatch:
-    inputs:
   schedule:
     - cron: '10 21 */3 * *'
   watch:
     types: started
 env:
-  REPO_URL: https://github.com/immortalwrt/immortalwrt
-  REPO_BRANCH: openwrt-21.02
+  REPO_URL: https://github.com/My-Compile/openwrt
+  REPO_BRANCH: 1806-k54-k511
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: r2s-immortalwrt-21.02.config
+  CONFIG_FILE: 1806-k54-k511.config
   DIY_P2_SH: diy-part2.sh
 
 jobs:
@@ -28,11 +27,11 @@ jobs:
         DEBIAN_FRONTEND: noninteractive
       run: |
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-        sudo -E apt-get update -y
-        sudo -E apt-get full-upgrade -y
-        sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-2004)
-        sudo -E apt-get -qq autoremove --purge
-        sudo -E apt-get -qq clean
+        sudo apt-get update -y
+        sudo apt-get full-upgrade -y
+        sudo apt-get install -y build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libreadline-dev libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint ccache curl wget vim nano python python3 python-pip python3-pip python-ply python3-ply haveged lrzsz device-tree-compiler scons antlr3 gperf intltool rsync
+        #sudo -E apt-get -qq autoremove --purge
+        #sudo -E apt-get -qq clean
         sudo timedatectl set-timezone Asia/Shanghai
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
@@ -117,6 +116,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.WORKFLOW_TOKEN }}
       with:
-        tag_name: r2s-openwrt-21.02-${{ steps.tag.outputs.release_tag }}
+        tag_name: r2s-1806-k54-k511-${{ steps.tag.outputs.release_tag }}
         body_path: release.txt
         files: ${{ env.FIRMWARE }}/*.gz
