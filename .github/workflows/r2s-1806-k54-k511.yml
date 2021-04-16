@@ -12,7 +12,7 @@ env:
   REPO_BRANCH: 1806-k54-k511
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: 1806-k54-k511.config
-  DIY_P2_SH: diy-part2.sh
+  DIY_P2_SH: 1.sh
 
 jobs:
   build:
