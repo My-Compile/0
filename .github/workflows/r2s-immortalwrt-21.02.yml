@@ -9,7 +9,7 @@ on:
   watch:
     types: started
 env:
-  REPO_URL: ttps://github.com/immortalwrt/immortalwrt
+  REPO_URL: https://github.com/immortalwrt/immortalwrt
   REPO_BRANCH: openwrt-21.02
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: openwrt-21.02.config
