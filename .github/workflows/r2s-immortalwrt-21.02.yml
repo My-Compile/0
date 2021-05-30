@@ -49,18 +49,16 @@ jobs:
         curl -sL https://raw.githubusercontent.com/00575/Nanopi/zstd-bin/zstd | sudo tee /usr/bin/zstd > /dev/null
         for i in {1..10}
         do
-          curl -sL --fail https://github.com/00575/file/releases/download/18.06/lede.$DEVICE.img.zst.0$i || break
-        done | zstdmt -d -o lede.img || (truncate -s 24g lede.img && mkfs.btrfs -M lede.img)
+          curl -sL --fail https://github.com/00575/file/releases/download/21.02/openwrt.$DEVICE.img.zst.0$i || break
+        done | zstdmt -d -o openwrt.img || (truncate -s 24g openwrt.img && mkfs.btrfs -M openwrt.img)
         LOOP_DEVICE=$(losetup -f) && echo "LOOP_DEVICE=$LOOP_DEVICE" >> $GITHUB_ENV
-        sudo losetup -P --direct-io $LOOP_DEVICE lede.img
-        mkdir lede && sudo mount -o nossd,compress=zstd $LOOP_DEVICE lede
-        if [ -d 'lede/.git' ]; then
-        cd lede && git config --local user.email "action@github.com" && git config --local user.name "GitHub Action"
-        git fetch && git reset --hard origin/openwrt-sdk
-        #git remote set-branches --add origin openwrt-18.06
-        #git merge -X theirs --no-edit origin/openwrt-18.06
+        sudo losetup -P --direct-io $LOOP_DEVICE openwrt.img
+        mkdir openwrt && sudo mount -o nossd,compress=zstd $LOOP_DEVICE openwrt
+        if [ -d 'openwrt/.git' ]; then
+        cd openwrt && git config --local user.email "action@github.com" && git config --local user.name "GitHub Action"
+        git fetch && git reset --hard origin/openwrt-21.02
         else
-        sudo chown $USER:$(id -gn) lede && git clone -b openwrt-18.06-k5.4 --single-branch https://github.com/immortalwrt/immortalwrt lede
+        sudo chown $USER:$(id -gn) openwrt && git clone -b openwrt-21.02 --single-branch https://github.com/immortalwrt/immortalwrt openwrt
         fi
         
     - name: Clone source code
@@ -120,15 +118,15 @@ jobs:
         du -h --max-depth=1 ./build_dir
         du -h --max-depth=1 ./bin
         
-    #- name: Check space usage
-      #if: (!cancelled())
-      #run: df -hT
+    - name: Check space usage
+      if: (!cancelled())
+      run: df -hT
 
     - name: Save cache state
       run: |
         cd
         sleep 120
-        #sudo umount openwrt
+        sudo umount openwrt
         sudo losetup -d $LOOP_DEVICE
         export AUTH="Authorization: token ${{ secrets.workflow_token }}"
         export cache_path='github.com/repos/00575/file/releases'
@@ -138,7 +136,7 @@ jobs:
         xargs -n1 -i curl -X DELETE -H "$AUTH" "https://api.$cache_path/assets/{}"
         echo $ret | jq -r '.assets[] | select(.name == "ib-'$DEVICE'.tar.xz").id' | \
         xargs -n1 -i curl -X DELETE -H "$AUTH" "https://api.$cache_path/assets/{}"
-        zstdmt -c --long lede.img | split --numeric=1 -b 2000m - lede.$DEVICE.img.zst.
+        zstdmt -c --long openwrt.img | split --numeric=1 -b 2000m - openwrt.$DEVICE.img.zst.
         ls *img.zst* ib-$DEVICE.tar.xz | parallel --wc 'while true; do curl -T {} -H "$AUTH" -H "Content-Type: application/octet-stream" "https://uploads.$cache_path/$cache_repo_id/assets?name={}" && break || true; done'
 
     - name: Upload bin directory
