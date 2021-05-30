@@ -20,13 +20,10 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 1
-
+    
     - name: Initialization environment
       env:
         DEBIAN_FRONTEND: noninteractive
@@ -41,6 +38,30 @@ jobs:
         sudo timedatectl set-timezone "$TZ"
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
+
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+
+    - name: Checkout
+      run: |
+        cd
+        curl -sL https://raw.githubusercontent.com/00575/Nanopi/zstd-bin/zstd | sudo tee /usr/bin/zstd > /dev/null
+        for i in {1..10}
+        do
+          curl -sL --fail https://github.com/00575/file/releases/download/18.06/lede.$DEVICE.img.zst.0$i || break
+        done | zstdmt -d -o lede.img || (truncate -s 24g lede.img && mkfs.btrfs -M lede.img)
+        LOOP_DEVICE=$(losetup -f) && echo "LOOP_DEVICE=$LOOP_DEVICE" >> $GITHUB_ENV
+        sudo losetup -P --direct-io $LOOP_DEVICE lede.img
+        mkdir lede && sudo mount -o nossd,compress=zstd $LOOP_DEVICE lede
+        if [ -d 'lede/.git' ]; then
+        cd lede && git config --local user.email "action@github.com" && git config --local user.name "GitHub Action"
+        git fetch && git reset --hard origin/openwrt-sdk
+        #git remote set-branches --add origin openwrt-18.06
+        #git merge -X theirs --no-edit origin/openwrt-18.06
+        else
+        sudo chown $USER:$(id -gn) lede && git clone -b openwrt-18.06-k5.4 --single-branch https://github.com/immortalwrt/immortalwrt lede
+        fi
         
     - name: Clone source code
       working-directory: /workdir
